@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/geist';
+
+:root { color-scheme: light; }
+html, body, #root { min-width: 100%; min-height: 100%; }

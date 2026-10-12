@@ -1,0 +1,84 @@
+{
+  "name": "utterflow",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run native:build && concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "start": "electron .",
+    "native:build": "sh scripts/build-native.sh",
+    "build": "npm run native:build && tsc -b && vite build",
+    "test": "node --test tests/*.test.cjs",
+    "lint": "oxlint",
+    "dist": "npm run build && electron-builder --mac dmg --arm64",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@rive-app/react-webgl2": "^4.36.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.55.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.6",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "wait-on": "^9.5.1"
+  },
+  "productName": "Utterflow",
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.utterflow.study",
+    "productName": "Utterflow",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/native/utterflow-hotkey",
+        "to": "native/utterflow-hotkey"
+      },
+      {
+        "from": "resources/sounds/listen-start.wav",
+        "to": "sounds/listen-start.wav"
+      },
+      {
+        "from": "resources/trayTemplate.png",
+        "to": "trayTemplate.png"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        "dmg"
+      ],
+      "identity": null,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Utterflow records your microphone only while you hold the configured shortcut.",
+        "NSAccessibilityUsageDescription": "Utterflow reads highlighted text from the active editor when you start a capture.",
+        "NSInputMonitoringUsageDescription": "Utterflow detects your configured press-and-hold shortcut globally."
+      }
+    },
+    "dmg": {
+      "artifactName": "Utterflow-${version}-${arch}.${ext}"
+    },
+    "directories": {
+      "output": "release"
+    }
+  }
+}
